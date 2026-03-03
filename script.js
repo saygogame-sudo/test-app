@@ -1,16 +1,32 @@
 function addTask() {
-  const input = document.getElementById("taskInput");
-  const taskText = input.value;
+    const input = document.getElementById("taskInput");
+    const text = input.value;
 
-  if (taskText === "") return;
+    if (text === "") return;
 
-  const li = document.createElement("li");
-  li.textContent = taskText;
+    let saved = localStorage.getItem("tasks");
+    let tasks = saved ? JSON.parse(saved) : [];
 
-  li.onclick = function () {
-    li.remove();
-  };
+    tasks.push(text);
 
-  document.getElementById("taskList").appendChild(li);
-  input.value = "";
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+
+    const ul = document.getElementById("taskList");
+    const li = document.createElement("li");
+    li.textContent = text;
+    ul.appendChild(li);
+
+    input.value = "";
 }
+window.onload = function() {
+    let saved = localStorage.getItem("tasks");
+    let tasks = saved ? JSON.parse(saved) : [];
+
+    const ul = document.getElementById("taskList");
+
+    tasks.forEach(function(task) {
+        const li = document.createElement("li");
+        li.textContent = task;
+        ul.appendChild(li);
+    });
+};
